@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>myMemoPad</title>
+    <script src="/js/jquery-2.1.3.min.js"></script>
+    <link rel="stylesheet" href="/css/sample.css">
+
+</head>
+
+<body>
+<br>
+
+
+    <header>
+        <h3 style="color: pink;">ストレージに保存する「愛の言葉」 </h3>
+    </header>
+
+    <!-- h1タイトルがあり、メインテキストエリアがあり、リストタグエリアがある。
+    このhtmlの構成 -->
+    <!-- 
+    ↓非表示にするコード、非表示の状態からスルッと現れる。 -->
+
+<br>
+
+
+    <div id="textareabox">
+        <main style='display:none;'>
+            <textarea id="text"></textarea>
+            <audio id='keySound'>
+                <source src="/img/S88_チャペルの鐘.mp3" type="audio/mpeg">
+            </audio>
+    </div>
+
+    <h5 style="color: rgb(105, 100, 100);">日付・署名 </h5>
+
+    <div id="textareabox">
+        <main style='display:none;'>
+            <textarea id="text2"></textarea>
+            <audio id='keySound'>
+                <source src="/img/S88_チャペルの鐘.mp3" type="audio/mpeg">
+            </audio>
+    </div>
+
+
+    <!-- ↓１個目のフォーム -->
+    <audio id="keySound" src="/img/S88_チャペルの鐘.mp3"></audio>
+    <script>
+        var keySound = document.getElementById('keySound');
+        var isTyping = false;
+        var timer;
+
+        document.getElementById('text').addEventListener('keydown', function () {
+            if (!isTyping) {
+                keySound.play();
+                isTyping = true;
+            }
+            clearTimeout(timer);
+        });
+
+        document.getElementById('text').addEventListener('keyup', function () {
+            timer = setTimeout(function () {
+                keySound.pause();
+                isTyping = false;
+            }, 2000); // 2秒後に音声停止
+        });
+    </script>
+
+
+
+
+
+
+    <!-- ２個目のフォーム↓ -->
+    <audio id="keySound" src="/img/S88_チャペルの鐘.mp3"></audio>
+    <script>
+        var keySound = document.getElementById('keySound');
+        var isTyping = false;
+        var timer;
+
+        document.getElementById('text2').addEventListener('keydown', function () {
+            if (!isTyping) {
+                keySound.play();
+                isTyping = true;
+            }
+            clearTimeout(timer);
+        });
+
+        document.getElementById('text2').addEventListener('keyup', function () {
+            timer = setTimeout(function () {
+                keySound.pause();
+                isTyping = false;
+            }, 2000); // 2秒後に音声停止
+        });
+    </script>
+
+
+
+
+
+    <!-- <script>
+    var keySound = document.getElementById('keySound');
+    var timer;
+
+    document.getElementById('text').addEventListener('keydown', function () {
+        if (!keySound.paused) {
+            keySound.pause();
+            keySound.currentTime = 0;
+            clearTimeout(timer);
+        }
+        keySound.play();
+    });
+
+    document.getElementById('text').addEventListener('keyup', function () {
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            keySound.pause();
+            keySound.currentTime = 0;
+        }, 1000); // 1秒後に音声停止
+    });
+</script>
+
+
+
+
+<script>
+    const textArea = document.getElementById("text");
+    // ↓初期値をfalesにしている
+    let isEncrypted = false;
+
+    // キーダウン（キーが押されたさい）にイベント発生
+    // エンター＋オルト
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" && event.altKey) {
+            if (isEncrypted) {
+                // 復号化
+                textArea.value = decrypt(textArea.value);
+            } else {
+                // 暗号化
+                textArea.value = encrypt(textArea.value);
+            }
+            isEncrypted = !isEncrypted;
+        }
+    });
+
+    function encrypt(text) {
+        // ここで暗号化処理を実装（例: シーザー暗号）
+        return text.split("").map(char => {
+            return String.fromCharCode(char.charCodeAt(0) + 1);
+        }).join("");
+    }
+
+    function decrypt(text) {
+        // ここで復号化処理を実装（例: シーザー暗号）
+        return text.split("").map(char => {
+            return String.fromCharCode(char.charCodeAt(0) - 1);
+        }).join("");
+    }
+</script>
+
+<br>
+<br>
+
+
+
+
+
+
+        <!-- ↓リストタグ、・で箇条書きしてくれるやつ -->
+    <br>
+
+    <ul>
+        <li id="save">Final answer?</li>
+        <br>
+
+        <li id="clear">Clear = Die❤️</li>
+    </ul>
+
+
+    <br>
+    <br>
+
+    </main>
+
+
+
+    <script>
+
+        // mainに対して表示の動きつけ
+        // slidedown以外にもfadeoutなどもある
+        $("main").slideDown(1000);
+
+
+        //1.Save クリックイベント
+        $('#save').on('click', function () {
+            // アラートでオンクリックイベントが機能しているか確認する↓
+            //   alert('save');
+
+            const v = $('#text').val();
+            localStorage.setItem('promise', v);
+        });
+
+
+
+        //1.Save クリックイベント、フォーム２
+        $('#save').on('click', function () {
+            // アラートでオンクリックイベントが機能しているか確認する↓
+            //   alert('save');
+
+            const v = $('#text2').val();
+            localStorage.setItem('name', v);
+        });
+
+
+
+
+
+        //2.clear クリックイベント
+        $('#clear').on('click', function () {
+            localStorage.removeItem('promise');
+            $('#text').val('');
+        });
+
+
+        //2.clear クリックイベント、フォーム２
+        $('#clear').on('click', function () {
+            localStorage.removeItem('neme');
+            $('#text2').val('');
+        });
+
+
+
+        $('#clear').on('click', function () {
+            const newBackgroundImage = 'url(/img/我妻由乃.jpg)';
+            $('body').css('background-image', newBackgroundImage);
+
+        });
+
+
+
+
+
+
+        //3.ページ読み込み：保存データ取得表示
+        if (localStorage.getItem('promise')) {
+            const v = localStorage.getItem('promise');
+            $('#text, #text2').val(v);
+        }
+
+        //3.ページ読み込み：保存データ取得表示
+        if (localStorage.getItem('memo2')) {
+            const v = localStorage.getItem('memo2');
+            $('#text2').val(v);
+        }
+
+        //ロード時に表示
+        //※こんなこともできる例
+    </script>
+</body>
+
+</html>
